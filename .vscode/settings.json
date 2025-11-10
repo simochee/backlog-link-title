@@ -1,7 +1,8 @@
 {
-  "github.copilot.chat.commitMessageGeneration.instructions": [
-    {
-      "text": "Always in English. Use conventional commit message format."
-    }
-  ]
+	"github.copilot.chat.commitMessageGeneration.instructions": [
+		{
+			"text": "Always in English. Use conventional commit message format."
+		}
+	],
+	"typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -6,6 +6,7 @@ export default defineConfig({
 		description:
 			"A browser extension that automatically unfurls Backlog issue URLs.",
 	},
+	imports: false,
 	modules: ["@wxt-dev/auto-icons"],
 	srcDir: "src",
 });
