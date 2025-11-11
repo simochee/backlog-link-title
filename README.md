@@ -1,9 +1,11 @@
-<p align="center"><img src="assets/icon.png" width="96"></p>
+<p align="center"><img src="./src/assets/icon.png" width="96"></p>
 <h1 align="center">Backlog Link Title</h1>
 
 <p align="center">
 A browser extension that automatically replaces Backlog link URLs with rich text titles showing project keys, status, and summaries for issues, wikis, and pull requests.
 </p>
+
+![](./screenshot.png)
 
 ## 💿 Install
 
