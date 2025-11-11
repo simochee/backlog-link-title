@@ -4,7 +4,8 @@ import { clsx } from "clsx";
 
 interface FormFieldProps {
 	label: string;
-	field: FieldApi<any, any, any, any>;
+	// @ts-expect-error FieldApi requires 23 type arguments but we only use the runtime shape.
+	field: FieldApi;
 	icon: Icon;
 	placeholder: string;
 }
