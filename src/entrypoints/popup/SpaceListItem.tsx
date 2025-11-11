@@ -53,18 +53,18 @@ export function SpaceListItem({
 	}, [form.store, space.apiKey, space.spaceDomain, onUpdate]);
 
 	return (
-		<div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow duration-200">
-			<div className="flex items-start justify-between mb-3">
-				<div className="flex items-center gap-1.5 flex-1 min-w-0">
-					<div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-emerald-500" />
-					<h3 className="text-sm font-semibold text-gray-900 truncate">
+		<div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-md">
+			<div className="mb-3 flex items-start justify-between">
+				<div className="flex min-w-0 flex-1 items-center gap-1.5">
+					<div className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-emerald-500" />
+					<h3 className="truncate font-semibold text-gray-900 text-sm">
 						{space.spaceDomain}
 					</h3>
 				</div>
 				<button
 					type="button"
 					onClick={onDelete}
-					className="flex-shrink-0 ml-2 text-xs font-medium text-red-600 hover:text-red-800 hover:bg-red-50 px-2 py-0.5 rounded transition-colors"
+					className="ml-2 flex-shrink-0 rounded px-2 py-0.5 font-medium text-red-600 text-xs transition-colors hover:bg-red-50 hover:text-red-800"
 				>
 					Delete
 				</button>

@@ -41,12 +41,12 @@ export function FormField({
 		<div>
 			<label
 				htmlFor={field.name}
-				className="block text-xs font-medium text-gray-700 mb-1"
+				className="mb-1 block font-medium text-gray-700 text-xs"
 			>
 				{label}
 			</label>
-			<div className="relative group">
-				<div className="absolute top-2 left-3 pointer-events-none">
+			<div className="group relative">
+				<div className="pointer-events-none absolute top-2 left-3">
 					<IconComponent
 						size={16}
 						className={`transition-colors ${iconColor}`}
@@ -64,8 +64,8 @@ export function FormField({
 				/>
 			</div>
 			{field.state.meta.errors.length > 0 && (
-				<p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-					<span className="inline-block w-1 h-1 rounded-full bg-red-600" />
+				<p className="mt-1 flex items-center gap-1 text-red-600 text-xs">
+					<span className="inline-block h-1 w-1 rounded-full bg-red-600" />
 					{field.state.meta.errors[0]?.message}
 				</p>
 			)}

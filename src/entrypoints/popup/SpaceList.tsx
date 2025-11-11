@@ -15,14 +15,14 @@ interface SpaceListProps {
 export function SpaceList({ spaces, onUpdate, onDelete }: SpaceListProps) {
 	if (spaces.length === 0) {
 		return (
-			<div className="text-center py-8 px-4 bg-white rounded-lg border-2 border-dashed border-gray-200">
-				<div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 mb-2">
+			<div className="rounded-lg border-2 border-gray-200 border-dashed bg-white px-4 py-8 text-center">
+				<div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
 					<IconDatabase size={20} className="text-gray-400" stroke={1.5} />
 				</div>
-				<p className="text-sm font-medium text-gray-900">
+				<p className="font-medium text-gray-900 text-sm">
 					No spaces configured
 				</p>
-				<p className="text-xs text-gray-500 mt-0.5">
+				<p className="mt-0.5 text-gray-500 text-xs">
 					Add your first Backlog space to get started
 				</p>
 			</div>
