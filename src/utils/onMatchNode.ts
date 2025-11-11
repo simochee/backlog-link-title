@@ -14,7 +14,8 @@ export const onMatchNode = (callback: (el: HTMLAnchorElement) => void) => {
 			return (
 				(url.hostname.endsWith("backlog.jp") ||
 					url.hostname.endsWith("backlog.com")) &&
-				url.href === node.textContent
+				url.href === node.textContent &&
+				!node.closest('[contenteditable="true"]')
 			);
 		} catch {
 			// ignore invalid URL
