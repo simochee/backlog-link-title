@@ -3,7 +3,7 @@ import { defineConfig } from "wxt";
 
 export default defineConfig({
 	manifest: {
-		name: "Backlog Unfurler",
+		name: "Backlog Link Title",
 		description:
 			"A browser extension that automatically unfurls Backlog issue URLs.",
 		permissions: ["storage"],
