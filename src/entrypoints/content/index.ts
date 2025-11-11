@@ -1,23 +1,15 @@
 import { defineContentScript } from "wxt/utils/define-content-script";
 import { onMatchNode } from "./onMatchNode";
-import {
-	unfurlDocument,
-	unfurlIssue,
-	unfurlPullRequest,
-	unfurlWiki,
-} from "./unfurler";
+import * as unfurlers from "./unfurlers";
 
 export default defineContentScript({
 	matches: ["<all_urls>"],
 	allFrames: true,
 	async main() {
 		onMatchNode(async (el) => {
-			await Promise.all([
-				unfurlIssue(el),
-				unfurlDocument(el),
-				unfurlPullRequest(el),
-				unfurlWiki(el),
-			]);
+			await Promise.all(
+				Object.values(unfurlers).map((unfurler) => unfurler(el)),
+			);
 		});
 	},
 });
