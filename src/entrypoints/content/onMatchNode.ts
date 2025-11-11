@@ -1,3 +1,5 @@
+import { backlogSpaces } from "@/utils/spaces";
+
 /**
  * MutationObserver で DocumentElement を監視し、処理を実施する要素に対してコールバックを実行する
  *
@@ -6,14 +8,19 @@
  *   - href の hostname が .backlog.com または .backlog.jp で終わる
  *   - href と textContent の内容が一致する
  */
-export const onMatchNode = (callback: (el: HTMLAnchorElement) => void) => {
+export const onMatchNode = async (
+	callback: (el: HTMLAnchorElement) => void,
+) => {
+	const spaces = await backlogSpaces.getValue();
+
+	if (!spaces.length) return;
+
 	const isMatchingElement = (node: HTMLAnchorElement): boolean => {
 		try {
 			const url = new URL(node.href);
 
 			return (
-				(url.hostname.endsWith("backlog.jp") ||
-					url.hostname.endsWith("backlog.com")) &&
+				spaces.some(({ spaceDomain }) => url.hostname === spaceDomain) &&
 				url.href === node.textContent &&
 				!node.closest('[contenteditable="true"]')
 			);
