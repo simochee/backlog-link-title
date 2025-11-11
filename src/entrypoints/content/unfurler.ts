@@ -1,5 +1,5 @@
+import { backlogSpaces } from "@/utils/spaces";
 import { replaceUrlInTextNodes } from "./replaceUrlInTextNodes";
-import { backlogSpaces } from "./spaces";
 
 export const unfurlIssue = async (el: HTMLAnchorElement) => {
 	const url = new URL(el.href);

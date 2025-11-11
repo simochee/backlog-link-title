@@ -1,12 +1,11 @@
 import { defineContentScript } from "wxt/utils/define-content-script";
-import "@/assets/style.css";
-import { onMatchNode } from "@/utils/onMatchNode";
+import { onMatchNode } from "./onMatchNode";
 import {
 	unfurlDocument,
 	unfurlIssue,
 	unfurlPullRequest,
 	unfurlWiki,
-} from "@/utils/unfurler";
+} from "./unfurler";
 
 export default defineContentScript({
 	matches: ["<all_urls>"],
