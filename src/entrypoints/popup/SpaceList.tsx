@@ -1,3 +1,4 @@
+import { IconDatabase } from "@tabler/icons-react";
 import { SpaceListItem } from "./SpaceListItem";
 
 interface BacklogSpace {
@@ -14,14 +15,22 @@ interface SpaceListProps {
 export function SpaceList({ spaces, onUpdate, onDelete }: SpaceListProps) {
 	if (spaces.length === 0) {
 		return (
-			<p className="text-gray-500 italic text-center py-4 px-3 bg-gray-50 rounded">
-				No spaces configured yet.
-			</p>
+			<div className="text-center py-12 px-6 bg-white rounded-lg border-2 border-dashed border-gray-200">
+				<div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-3">
+					<IconDatabase size={24} className="text-gray-400" stroke={1.5} />
+				</div>
+				<p className="text-sm font-medium text-gray-900">
+					No spaces configured
+				</p>
+				<p className="text-xs text-gray-500 mt-1">
+					Add your first Backlog space to get started
+				</p>
+			</div>
 		);
 	}
 
 	return (
-		<div>
+		<div className="space-y-3">
 			{spaces.map((space, index) => (
 				<SpaceListItem
 					key={`${space.spaceDomain}-${index}`}
