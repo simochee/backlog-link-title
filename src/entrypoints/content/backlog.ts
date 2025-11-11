@@ -27,11 +27,13 @@ export type BacklogIssueComment = {
 
 /** @see https://developer.nulab.com/ja/docs/backlog/api/2/get-wiki-page/ */
 export type BacklogWiki = {
+	projectId: number;
 	name: string;
 };
 
 /** @see https://developer.nulab.com/ja/docs/backlog/api/2/get-document/ */
 export type BacklogDocument = {
+	projectId: number;
 	title: string;
 };
 

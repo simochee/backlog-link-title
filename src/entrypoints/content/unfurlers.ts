@@ -3,6 +3,7 @@ import type {
 	BacklogDocument,
 	BacklogIssue,
 	BacklogIssueComment,
+	BacklogProject,
 	BacklogPullRequest,
 	BacklogWiki,
 } from "./backlog";
@@ -20,23 +21,28 @@ export const issueUnfurler = defineUnfurler({
 	parseUrl: (url) =>
 		regex(`^/view/${ISSUE_KEY_REGEX}$`).exec(url.pathname)?.groups,
 	buildTitle: async (params, url) => {
+		const promises = [
+			client<BacklogProject>(
+				url.hostname,
+				`/api/v2/projects/${params.issueKey.split("-")[0]}`,
+			),
+			client<BacklogIssue>(url.hostname, `/api/v2/issues/${params.issueKey}`),
+		] as const;
+
 		if (url.hash.startsWith("#comment-")) {
-			const [issue, issueComment] = await Promise.all([
-				client<BacklogIssue>(url.hostname, `/api/v2/issues/${params.issueKey}`),
+			const [project, issue, issueComment] = await Promise.all([
+				...promises,
 				client<BacklogIssueComment>(
 					url.hostname,
 					`/api/v2/issues/${params.issueKey}/comments/${url.hash.slice(9)}`,
 				),
 			]);
 
-			return `Comment on ${issue.summary} by ${issueComment.createdUser.name}`;
+			return `[${project.projectKey}][${issue.status.name}] ${issue.summary} | Comment by ${issueComment.createdUser.name}`;
 		}
-		const issue = await client<BacklogIssue>(
-			url.hostname,
-			`/api/v2/issues/${params.issueKey}`,
-		);
+		const [project, issue] = await Promise.all(promises);
 
-		return `Issue: ${issue.summary} [${issue.status.name}]`;
+		return `[${project.projectKey}][${issue.status.name}] ${issue.summary} | Issue`;
 	},
 });
 
@@ -48,7 +54,11 @@ export const wikiUnfurler = defineUnfurler({
 			url.hostname,
 			`/api/v2/wikis/${params.wikiId}`,
 		);
-		return `Wiki: ${wiki.name}`;
+		const project = await client<BacklogProject>(
+			url.hostname,
+			`/api/v2/projects/${wiki.projectId}`,
+		);
+		return `[${project.projectKey}] ${wiki.name} | Wiki`;
 	},
 });
 
@@ -58,11 +68,17 @@ export const documentUnfurler = defineUnfurler({
 			url.pathname,
 		)?.groups,
 	buildTitle: async (params, url) => {
-		const document = await client<BacklogDocument>(
-			url.hostname,
-			`/api/v2/documents/${params.documentId}`,
-		);
-		return `Document: ${document.title}`;
+		const [project, document] = await Promise.all([
+			client<BacklogProject>(
+				url.hostname,
+				`/api/v2/projects/${params.projectKey}`,
+			),
+			client<BacklogDocument>(
+				url.hostname,
+				`/api/v2/documents/${params.documentId}`,
+			),
+		]);
+		return `[${project.projectKey}] ${document.title} | Document`;
 	},
 });
 
@@ -81,6 +97,6 @@ export const pullRequestUnfurler = defineUnfurler({
 			`/api/v2/projects/${params.projectKey}/git/repositories/${params.repository}/pullRequests/${params.number}`,
 		);
 
-		return `Pull Request: ${pullRequest.summary} [${pullRequest.status.name}]`;
+		return `[${params.projectKey}/${params.repository}#${params.number}][${pullRequest.status.name}] ${pullRequest.summary} | Pull Request`;
 	},
 });

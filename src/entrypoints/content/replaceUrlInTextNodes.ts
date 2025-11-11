@@ -10,6 +10,7 @@ export const replaceUrlInTextNodes = (
 	replacementText: string,
 ): void => {
 	const url = anchor.href;
+	anchor.title = url;
 
 	// anchor以下のすべてのテキストノードを再帰的に走査して置き換え
 	const replaceInNode = (node: Node): void => {

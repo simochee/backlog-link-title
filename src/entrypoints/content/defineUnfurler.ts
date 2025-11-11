@@ -25,7 +25,7 @@ export const defineUnfurler = <T>(unfurler: UnfurlerObject<T>) => {
 				"/api/v2/space",
 				24 * 60 * 60 * 1000,
 			);
-			title = `[${space.name}] ${title}`;
+			title = `[${space.name}]${title}`;
 		}
 
 		replaceUrlInTextNodes(el, title);
