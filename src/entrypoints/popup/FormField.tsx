@@ -6,8 +6,6 @@ interface FormFieldProps {
 	field: FieldApi<any, any, any, any>;
 	icon: Icon;
 	placeholder: string;
-	getIconColor?: (field: FieldApi<any, any, any, any>) => string;
-	getInputClassName?: (field: FieldApi<any, any, any, any>) => string;
 }
 
 export function FormField({
@@ -15,27 +13,17 @@ export function FormField({
 	field,
 	icon: IconComponent,
 	placeholder,
-	getIconColor,
-	getInputClassName,
 }: FormFieldProps) {
-	const defaultIconColor = (f: FieldApi<any, any, any, any>) =>
-		f.state.meta.isTouched && f.state.meta.errors.length > 0
+	const iconColor =
+		field.state.meta.isTouched && field.state.meta.errors.length > 0
 			? "text-red-500"
 			: "text-gray-400 group-focus-within:text-emerald-600";
 
-	const defaultInputClassName = (f: FieldApi<any, any, any, any>) =>
-		`w-full pl-9 pr-3 py-2 text-sm bg-gray-50 border rounded-lg focus:outline-none focus:ring-2 focus:bg-white transition-all duration-200 ${
-			f.state.meta.isTouched && f.state.meta.errors.length > 0
-				? "border-red-300 focus:border-red-500 focus:ring-red-500/20"
-				: "border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20"
-		}`;
-
-	const iconColor = getIconColor
-		? getIconColor(field)
-		: defaultIconColor(field);
-	const inputClassName = getInputClassName
-		? getInputClassName(field)
-		: defaultInputClassName(field);
+	const inputClassName = `w-full pl-9 pr-3 py-2 text-sm bg-gray-50 border rounded-lg focus:outline-none focus:ring-2 focus:bg-white transition-all duration-200 ${
+		field.state.meta.isTouched && field.state.meta.errors.length > 0
+			? "border-red-300 focus:border-red-500 focus:ring-red-500/20"
+			: "border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20"
+	}`;
 
 	return (
 		<div>

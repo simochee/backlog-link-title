@@ -77,18 +77,6 @@ export function SpaceListItem({
 						field={field}
 						icon={IconKey}
 						placeholder="Enter your API key"
-						getIconColor={(f) =>
-							f.state.meta.errors.length > 0
-								? "text-red-500"
-								: "text-gray-400 group-focus-within:text-emerald-600"
-						}
-						getInputClassName={(f) =>
-							`w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
-								f.state.meta.errors.length > 0
-									? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500/20"
-									: "border-gray-200 bg-gray-50 focus:border-emerald-500 focus:ring-emerald-500/20 focus:bg-white"
-							}`
-						}
 					/>
 				)}
 			</form.Field>
