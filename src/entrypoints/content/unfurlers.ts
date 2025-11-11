@@ -11,7 +11,12 @@ const PULL_REQUEST_NUMBER_REGEX = "(?<number>[0-9]+)" as const;
 export const issueUnfurler = defineUnfurler({
 	parseUrl: (url) =>
 		regex(`^/view/${ISSUE_KEY_REGEX}$`).exec(url.pathname)?.groups,
-	buildTitle: (params) => `Issue: ${params.issueKey}`,
+	buildTitle: (params, url) => {
+		if (url.hash.startsWith("#comment-")) {
+			return `Comment on ${params.issueKey}`;
+		}
+		return `Issue: ${params.issueKey}`;
+	},
 });
 
 export const wikiUnfurler = defineUnfurler({
@@ -33,6 +38,10 @@ export const pullRequestUnfurler = defineUnfurler({
 		regex(
 			`^/git/${PROJECT_KEY_REGEX}/${REPOSITORY_REGEX}/pullRequests/${PULL_REQUEST_NUMBER_REGEX}$`,
 		).exec(url.pathname)?.groups,
-	buildTitle: (params) =>
-		`Pull Request: ${params.projectKey}/${params.repository}#${params.number}`,
+	buildTitle: (params, url) => {
+		if (url.hash.startsWith("#comment-")) {
+			return `Comment on Pull Request #${params.number}`;
+		}
+		return `Pull Request #${params.number}`;
+	},
 });

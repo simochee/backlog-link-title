@@ -2,7 +2,7 @@ import { replaceUrlInTextNodes } from "./replaceUrlInTextNodes";
 
 type UnfurlerObject<T> = {
 	parseUrl: (url: URL) => T | null | undefined;
-	buildTitle: (params: T) => string | Promise<string>;
+	buildTitle: (params: T, url: URL) => string | Promise<string>;
 };
 
 export const defineUnfurler = <T>(unfurler: UnfurlerObject<T>) => {
@@ -11,6 +11,6 @@ export const defineUnfurler = <T>(unfurler: UnfurlerObject<T>) => {
 		const parsed = unfurler.parseUrl(url);
 		if (!parsed) return;
 
-		replaceUrlInTextNodes(el, await unfurler.buildTitle(parsed));
+		replaceUrlInTextNodes(el, await unfurler.buildTitle(parsed, url));
 	};
 };
