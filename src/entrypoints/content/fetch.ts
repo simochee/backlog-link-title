@@ -1,31 +1,8 @@
-import { storage } from "wxt/utils/storage";
 import { backlogSpaces } from "@/utils/spaces";
+import { getCachedData, setCachedData } from "./cache";
 
 // In-flight request deduplication
 const inFlightRequests = new Map<string, Promise<unknown>>();
-
-// Define storage for cache
-const cacheStorage = storage.defineItem<
-	Record<string, { data: unknown; timestamp: number }>
->("local:backlogApiCache", { fallback: {} });
-
-// Maximum cache age (24 hours)
-const MAX_CACHE_AGE = 24 * 60 * 60 * 1000;
-
-// Clean up expired cache entries
-export const cleanExpiredCache = async () => {
-	const cache = await cacheStorage.getValue();
-	const now = Date.now();
-	const cleanedCache: Record<string, { data: unknown; timestamp: number }> = {};
-
-	for (const [key, entry] of Object.entries(cache)) {
-		if (now - entry.timestamp < MAX_CACHE_AGE) {
-			cleanedCache[key] = entry;
-		}
-	}
-
-	await cacheStorage.setValue(cleanedCache);
-};
 
 export const client = async <T>(
 	hostname: string,
@@ -42,10 +19,9 @@ export const client = async <T>(
 	const cacheKey = `${hostname}${pathname}`;
 
 	// Check cache first
-	const cache = await cacheStorage.getValue();
-	const cachedEntry = cache[cacheKey];
-	if (cachedEntry && Date.now() - cachedEntry.timestamp < ttl) {
-		return cachedEntry.data as T;
+	const cachedData = await getCachedData<T>(cacheKey, ttl);
+	if (cachedData !== undefined) {
+		return cachedData;
 	}
 
 	// Check if request is already in flight
@@ -63,14 +39,7 @@ export const client = async <T>(
 			const data = (await response.json()) as T;
 
 			// Store in cache
-			const currentCache = await cacheStorage.getValue();
-			await cacheStorage.setValue({
-				...currentCache,
-				[cacheKey]: {
-					data,
-					timestamp: Date.now(),
-				},
-			});
+			await setCachedData(cacheKey, data);
 
 			return data;
 		} finally {

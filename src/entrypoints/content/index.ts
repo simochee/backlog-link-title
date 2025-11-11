@@ -1,5 +1,5 @@
 import { defineContentScript } from "wxt/utils/define-content-script";
-import { cleanExpiredCache } from "./fetch";
+import { cleanExpiredCache } from "./cache";
 import { onMatchNode } from "./onMatchNode";
 import * as unfurlers from "./unfurlers";
 

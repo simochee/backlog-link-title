@@ -20,7 +20,11 @@ export const defineUnfurler = <T>(unfurler: UnfurlerObject<T>) => {
 		if (!title) return;
 
 		if (location.hostname !== url.hostname) {
-			const space = await client<BacklogSpace>(url.hostname, "/api/v2/space");
+			const space = await client<BacklogSpace>(
+				url.hostname,
+				"/api/v2/space",
+				24 * 60 * 60 * 1000,
+			);
 			title = `[${space.name}] ${title}`;
 		}
 
