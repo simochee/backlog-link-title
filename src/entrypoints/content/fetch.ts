@@ -9,6 +9,24 @@ const cacheStorage = storage.defineItem<
 	Record<string, { data: unknown; timestamp: number }>
 >("local:backlogApiCache", { fallback: {} });
 
+// Maximum cache age (24 hours)
+const MAX_CACHE_AGE = 24 * 60 * 60 * 1000;
+
+// Clean up expired cache entries
+export const cleanExpiredCache = async () => {
+	const cache = await cacheStorage.getValue();
+	const now = Date.now();
+	const cleanedCache: Record<string, { data: unknown; timestamp: number }> = {};
+
+	for (const [key, entry] of Object.entries(cache)) {
+		if (now - entry.timestamp < MAX_CACHE_AGE) {
+			cleanedCache[key] = entry;
+		}
+	}
+
+	await cacheStorage.setValue(cleanedCache);
+};
+
 export const client = async <T>(
 	hostname: string,
 	pathname: string,
