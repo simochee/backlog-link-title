@@ -1,5 +1,6 @@
 import { IconKey, IconWorld } from "@tabler/icons-react";
 import { useForm } from "@tanstack/react-form";
+import { useQuery } from "@tanstack/react-query";
 import * as v from "valibot";
 import { FormField } from "./FormField";
 
@@ -27,15 +28,43 @@ const formSchema = v.object({
 	apiKey: v.pipe(v.string(), v.nonEmpty("API key is required")),
 });
 
+async function getActiveTabDomain(): Promise<string> {
+	try {
+		const tabs = await browser.tabs.query({
+			active: true,
+			currentWindow: true,
+		});
+		const activeTab = tabs[0];
+		if (activeTab?.url) {
+			const url = new URL(activeTab.url);
+			const hostname = url.hostname;
+			// Check if it's a Backlog domain
+			if (hostname.match(/^[0-9a-z-]+\.backlog\.(jp|com)$/)) {
+				return hostname;
+			}
+		}
+	} catch (_e) {
+		// Invalid URL or error, ignore
+	}
+	return "";
+}
+
 export function SpaceForm({
 	initialValue,
 	onSubmit,
 	onCancel,
 	submitLabel,
 }: SpaceFormProps) {
+	const { data: activeTabDomain, isLoading } = useQuery({
+		queryKey: ["activeTabDomain"],
+		queryFn: getActiveTabDomain,
+		// Only fetch if no initialValue is provided
+		enabled: !initialValue?.spaceDomain,
+	});
+
 	const form = useForm({
 		defaultValues: {
-			spaceDomain: initialValue?.spaceDomain ?? "",
+			spaceDomain: initialValue?.spaceDomain ?? activeTabDomain ?? "",
 			apiKey: initialValue?.apiKey ?? "",
 		},
 		onSubmit: async ({ value }) => {
@@ -46,6 +75,10 @@ export function SpaceForm({
 			onChange: formSchema,
 		},
 	});
+
+	if (isLoading) {
+		return <div className="text-center text-gray-500 text-sm">Loading...</div>;
+	}
 
 	return (
 		<form
