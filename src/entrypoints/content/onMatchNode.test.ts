@@ -92,9 +92,9 @@ describe("onMatchNode", () => {
 	describe("cleanup", () => {
 		it("should disconnect observer when cleanup function is called", async () => {
 			const callback = vi.fn();
-			const disconnect = onMatchNode(callback);
+			const disconnect = await onMatchNode(callback);
 
-			disconnect();
+			disconnect?.();
 
 			const anchor = createAnchor("https://example.backlog.jp/view/TEST-123");
 			document.body.appendChild(anchor);
