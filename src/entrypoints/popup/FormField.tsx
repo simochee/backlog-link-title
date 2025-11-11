@@ -1,6 +1,7 @@
 import type { Icon } from "@tabler/icons-react";
 import type { FieldApi } from "@tanstack/react-form";
 import { clsx } from "clsx";
+import { useId } from "react";
 
 interface FormFieldProps {
 	label: string;
@@ -16,6 +17,7 @@ export function FormField({
 	icon: IconComponent,
 	placeholder,
 }: FormFieldProps) {
+	const inputId = useId();
 	const hasError =
 		field.state.meta.isTouched && field.state.meta.errors.length > 0;
 
@@ -37,7 +39,7 @@ export function FormField({
 	return (
 		<div>
 			<label
-				htmlFor={field.name}
+				htmlFor={inputId}
 				className="mb-1 block font-medium text-gray-700 text-xs"
 			>
 				{label}
@@ -47,7 +49,7 @@ export function FormField({
 					<IconComponent size={16} className={iconColor} />
 				</div>
 				<input
-					id={field.name}
+					id={inputId}
 					name={field.name}
 					type="text"
 					value={field.state.value}
