@@ -21,7 +21,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.4",
-		"@tanstack/valibot-form-adapter": "^0.42.1",
 		"@tsconfig/vite-react": "^7.0.1",
 		"@types/react": "^19.2.2",
 		"@types/react-dom": "^19.2.2",

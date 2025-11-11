@@ -33,9 +33,6 @@ importers:
       '@biomejs/biome':
         specifier: ^2.3.4
         version: 2.3.4
-      '@tanstack/valibot-form-adapter':
-        specifier: ^0.42.1
-        version: 0.42.1(valibot@1.1.0(typescript@5.9.3))
       '@tsconfig/vite-react':
         specifier: ^7.0.1
         version: 7.0.1
@@ -738,9 +735,6 @@ packages:
     resolution: {integrity: sha512-eq+PpuutUyubXu+ycC1GIiVwBs86NF/8yYJJAKSpPcJLWl6R/761F1H4F/9ziX6zKezltFUH1ah3Cz8Ah+KJrw==}
     engines: {node: '>=18'}
 
-  '@tanstack/form-core@0.42.1':
-    resolution: {integrity: sha512-jTU0jyHqFceujdtPNv3jPVej1dTqBwa8TYdIyWB5BCwRVUBZEp1PiYEBkC9r92xu5fMpBiKc+JKud3eeVjuMiA==}
-
   '@tanstack/form-core@1.24.4':
     resolution: {integrity: sha512-+eIR7DiDamit1zvTVgaHxuIRA02YFgJaXMUGxsLRJoBpUjGl/g/nhUocQoNkRyfXqOlh8OCMTanjwDprWSRq6w==}
 
@@ -765,11 +759,6 @@ packages:
 
   '@tanstack/store@0.7.7':
     resolution: {integrity: sha512-xa6pTan1bcaqYDS9BDpSiS63qa6EoDkPN9RsRaxHuDdVDNntzq3xNwR5YKTU/V3SkSyC9T4YVOPh2zRQN0nhIQ==}
-
-  '@tanstack/valibot-form-adapter@0.42.1':
-    resolution: {integrity: sha512-MUWjxGm8ZVDEqW79UET9U0hh87r8hj1oM0dTjCUHnHjvyIHpItk3SDkv4OjBSBoy9Y4kWvCF+0NQ3KM/omdGqg==}
-    peerDependencies:
-      valibot: ^1.0.0 || ^1.0.0-beta.4 || ^1.0.0-rc
 
   '@tsconfig/vite-react@7.0.1':
     resolution: {integrity: sha512-IVbW532kRhqqiMbX1N+vnGYb+B6vNBw5FM/QXh1wGZOHG8HNeBzGEO8irFSNQUThg9mAHiNirCdwjsYeRyvU+Q==}
@@ -2825,10 +2814,6 @@ snapshots:
 
   '@tanstack/devtools-event-client@0.3.4': {}
 
-  '@tanstack/form-core@0.42.1':
-    dependencies:
-      '@tanstack/store': 0.7.7
-
   '@tanstack/form-core@1.24.4':
     dependencies:
       '@tanstack/devtools-event-client': 0.3.4
@@ -2858,11 +2843,6 @@ snapshots:
       use-sync-external-store: 1.6.0(react@19.2.0)
 
   '@tanstack/store@0.7.7': {}
-
-  '@tanstack/valibot-form-adapter@0.42.1(valibot@1.1.0(typescript@5.9.3))':
-    dependencies:
-      '@tanstack/form-core': 0.42.1
-      valibot: 1.1.0(typescript@5.9.3)
 
   '@tsconfig/vite-react@7.0.1': {}
 

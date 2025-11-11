@@ -1,6 +1,5 @@
 import { IconKey, IconWorld } from "@tabler/icons-react";
 import { useForm } from "@tanstack/react-form";
-import { valibotValidator } from "@tanstack/valibot-form-adapter";
 import * as v from "valibot";
 import { FormField } from "./FormField";
 
@@ -43,7 +42,6 @@ export function SpaceForm({
 			onSubmit(value);
 			form.reset();
 		},
-		validatorAdapter: valibotValidator(),
 		validators: {
 			onChange: formSchema,
 		},

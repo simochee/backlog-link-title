@@ -1,7 +1,6 @@
 import { IconKey } from "@tabler/icons-react";
 import { useForm } from "@tanstack/react-form";
-import { valibotValidator } from "@tanstack/valibot-form-adapter";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import * as v from "valibot";
 import { FormField } from "./FormField";
 
@@ -29,31 +28,17 @@ export function SpaceListItem({
 		defaultValues: {
 			apiKey: space.apiKey,
 		},
-		onSubmit: async ({ value }) => {
-			// Not used anymore, but keeping for form structure
-		},
-		validatorAdapter: valibotValidator(),
 		validators: {
 			onChange: formSchema,
 		},
 	});
 
-	const isFirstRender = useRef(true);
-
-	// Watch for changes and auto-save
 	useEffect(() => {
-		const unsubscribe = form.store.subscribe(() => {
+		return form.store.subscribe(() => {
 			const state = form.store.state;
 			const apiKeyField = state.fieldMeta.apiKey;
 			const apiKeyValue = state.values.apiKey;
 
-			// Skip on first render
-			if (isFirstRender.current) {
-				isFirstRender.current = false;
-				return;
-			}
-
-			// If valid and changed, auto-save
 			if (
 				apiKeyField &&
 				apiKeyField.errors.length === 0 &&
@@ -65,8 +50,6 @@ export function SpaceListItem({
 				});
 			}
 		});
-
-		return () => unsubscribe();
 	}, [form.store, space.apiKey, space.spaceDomain, onUpdate]);
 
 	return (
