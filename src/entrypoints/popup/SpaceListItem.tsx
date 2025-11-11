@@ -32,6 +32,8 @@ export function SpaceListItem({
 				spaceDomain: space.spaceDomain,
 				apiKey: value.apiKey,
 			});
+			// Reset form state to mark as pristine after successful update
+			form.reset();
 		},
 		validatorAdapter: valibotValidator(),
 		validators: {
@@ -74,35 +76,37 @@ export function SpaceListItem({
 								API Key
 							</label>
 							<div className="flex gap-2">
-								<div className="flex-1 relative group">
-									<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-										<IconKey
-											size={16}
-											className={`transition-colors ${
+								<div className="flex-1">
+									<div className="relative group">
+										<div className="absolute top-2 left-3 pointer-events-none">
+											<IconKey
+												size={16}
+												className={`transition-colors ${
+													field.state.meta.isDirty
+														? "text-amber-500"
+														: field.state.meta.errors.length > 0
+															? "text-red-500"
+															: "text-gray-400 group-focus-within:text-emerald-600"
+												}`}
+											/>
+										</div>
+										<input
+											id={`${space.spaceDomain}-apikey`}
+											name={field.name}
+											type="text"
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onChange={(e) => field.handleChange(e.target.value)}
+											className={`w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
 												field.state.meta.isDirty
-													? "text-amber-500"
+													? "border-amber-300 bg-amber-50 focus:border-amber-500 focus:ring-amber-500/20"
 													: field.state.meta.errors.length > 0
-														? "text-red-500"
-														: "text-gray-400 group-focus-within:text-emerald-600"
+														? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500/20"
+														: "border-gray-200 bg-gray-50 focus:border-emerald-500 focus:ring-emerald-500/20 focus:bg-white"
 											}`}
+											placeholder="Enter your API key"
 										/>
 									</div>
-									<input
-										id={`${space.spaceDomain}-apikey`}
-										name={field.name}
-										type="text"
-										value={field.state.value}
-										onBlur={field.handleBlur}
-										onChange={(e) => field.handleChange(e.target.value)}
-										className={`w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
-											field.state.meta.isDirty
-												? "border-amber-300 bg-amber-50 focus:border-amber-500 focus:ring-amber-500/20"
-												: field.state.meta.errors.length > 0
-													? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500/20"
-													: "border-gray-200 bg-gray-50 focus:border-emerald-500 focus:ring-emerald-500/20 focus:bg-white"
-										}`}
-										placeholder="Enter your API key"
-									/>
 									{field.state.meta.errors.length > 0 && (
 										<p className="mt-1 text-xs text-red-600 flex items-center gap-1">
 											<span className="inline-block w-1 h-1 rounded-full bg-red-600" />
@@ -121,7 +125,7 @@ export function SpaceListItem({
 										<button
 											type="submit"
 											disabled={!canSubmit || !isDirty}
-											className="flex-shrink-0 px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-lg hover:from-emerald-700 hover:to-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 shadow-sm hover:shadow transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-sm disabled:hover:from-emerald-600 disabled:hover:to-emerald-700"
+											className="flex-shrink-0 self-start px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-lg hover:from-emerald-700 hover:to-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 shadow-sm hover:shadow transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-sm disabled:hover:from-emerald-600 disabled:hover:to-emerald-700"
 										>
 											{isSubmitting ? "Updating..." : "Update"}
 										</button>
