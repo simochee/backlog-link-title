@@ -5,7 +5,7 @@ export default defineConfig({
 	manifest: {
 		name: "Backlog Link Title",
 		description:
-			"A browser extension that automatically unfurls Backlog issue URLs.",
+			"Automatically replaces Backlog links with rich text titles (issues, wikis, PRs).",
 		permissions: ["storage"],
 	},
 	imports: false,
