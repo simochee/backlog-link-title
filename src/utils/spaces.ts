@@ -6,7 +6,7 @@ const schema = v.object({
 	apiKey: v.string(),
 });
 
-type BacklogSpace = v.InferOutput<typeof schema>;
+export type BacklogSpace = v.InferOutput<typeof schema>;
 
 const getFallbackValue = (): BacklogSpace[] => {
 	try {

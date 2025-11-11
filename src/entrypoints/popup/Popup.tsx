@@ -1,44 +1,65 @@
 import { IconPlus } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
-import { backlogSpaces } from "@/utils/spaces";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import type { BacklogSpace } from "@/utils/spaces";
 import { SpaceForm } from "./SpaceForm";
 import { SpaceList } from "./SpaceList";
-
-interface BacklogSpace {
-	spaceDomain: string;
-	apiKey: string;
-}
+import {
+	addSpaceMutationOptions,
+	deleteSpaceMutationOptions,
+	spacesQueryOptions,
+	updateSpaceMutationOptions,
+} from "./spacesOptions";
 
 export function Popup() {
-	const [spaces, setSpaces] = useState<BacklogSpace[]>([]);
+	const queryClient = useQueryClient();
+	const { data: spaces = [], isLoading } = useQuery(spacesQueryOptions);
 	const [isFormOpen, setIsFormOpen] = useState(false);
 
-	useEffect(() => {
-		backlogSpaces.getValue().then(setSpaces);
-	}, []);
+	const addSpaceMutation = useMutation({
+		...addSpaceMutationOptions,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: spacesQueryOptions.queryKey });
+		},
+	});
+
+	const updateSpaceMutation = useMutation({
+		...updateSpaceMutationOptions,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: spacesQueryOptions.queryKey });
+		},
+	});
+
+	const deleteSpaceMutation = useMutation({
+		...deleteSpaceMutationOptions,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: spacesQueryOptions.queryKey });
+		},
+	});
 
 	const handleAdd = async (space: BacklogSpace) => {
-		const newSpaces = [...spaces, space];
-		await backlogSpaces.setValue(newSpaces);
-		setSpaces(newSpaces);
+		await addSpaceMutation.mutateAsync(space);
 		setIsFormOpen(false);
 	};
 
 	const handleUpdate = async (index: number, space: BacklogSpace) => {
-		const newSpaces = [...spaces];
-		newSpaces[index] = space;
-		await backlogSpaces.setValue(newSpaces);
-		setSpaces(newSpaces);
+		await updateSpaceMutation.mutateAsync({ index, space });
 	};
 
 	const handleDelete = async (index: number) => {
 		if (!confirm("Are you sure you want to delete this space?")) {
 			return;
 		}
-		const newSpaces = spaces.filter((_, i) => i !== index);
-		await backlogSpaces.setValue(newSpaces);
-		setSpaces(newSpaces);
+		await deleteSpaceMutation.mutateAsync(index);
 	};
+
+	if (isLoading) {
+		return (
+			<div className="flex min-h-screen min-w-[28rem] max-w-[40rem] items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+				<p className="text-gray-500 text-sm">Loading...</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className="min-h-screen min-w-[28rem] max-w-[40rem] bg-gradient-to-br from-gray-50 to-gray-100">

@@ -1,10 +1,6 @@
 import { IconDatabase } from "@tabler/icons-react";
+import type { BacklogSpace } from "@/utils/spaces";
 import { SpaceListItem } from "./SpaceListItem";
-
-interface BacklogSpace {
-	spaceDomain: string;
-	apiKey: string;
-}
 
 interface SpaceListProps {
 	spaces: BacklogSpace[];

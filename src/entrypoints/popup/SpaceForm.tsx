@@ -1,13 +1,9 @@
 import { IconKey, IconWorld } from "@tabler/icons-react";
 import { useForm } from "@tanstack/react-form";
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import * as v from "valibot";
+import type { BacklogSpace } from "@/utils/spaces";
 import { FormField } from "./FormField";
-
-interface BacklogSpace {
-	spaceDomain: string;
-	apiKey: string;
-}
 
 interface SpaceFormProps {
 	initialValue?: BacklogSpace;
@@ -49,6 +45,11 @@ async function getActiveTabDomain(): Promise<string> {
 	return "";
 }
 
+const activeTabDomainQueryOptions = queryOptions({
+	queryKey: ["activeTabDomain"],
+	queryFn: getActiveTabDomain,
+});
+
 export function SpaceForm({
 	initialValue,
 	onSubmit,
@@ -56,8 +57,7 @@ export function SpaceForm({
 	submitLabel,
 }: SpaceFormProps) {
 	const { data: activeTabDomain, isLoading } = useQuery({
-		queryKey: ["activeTabDomain"],
-		queryFn: getActiveTabDomain,
+		...activeTabDomainQueryOptions,
 		// Only fetch if no initialValue is provided
 		enabled: !initialValue?.spaceDomain,
 	});

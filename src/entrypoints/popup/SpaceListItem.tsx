@@ -2,12 +2,8 @@ import { IconKey } from "@tabler/icons-react";
 import { useForm } from "@tanstack/react-form";
 import { useEffect } from "react";
 import * as v from "valibot";
+import type { BacklogSpace } from "@/utils/spaces";
 import { FormField } from "./FormField";
-
-interface BacklogSpace {
-	spaceDomain: string;
-	apiKey: string;
-}
 
 interface SpaceListItemProps {
 	space: BacklogSpace;
