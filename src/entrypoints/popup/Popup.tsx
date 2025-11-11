@@ -46,11 +46,11 @@ export function Popup() {
 		await updateSpaceMutation.mutateAsync({ index, space });
 	};
 
-	const handleDelete = async (index: number) => {
+	const handleDelete = async (spaceDomain: string) => {
 		if (!confirm("Are you sure you want to delete this space?")) {
 			return;
 		}
-		await deleteSpaceMutation.mutateAsync(index);
+		await deleteSpaceMutation.mutateAsync(spaceDomain);
 	};
 
 	if (isLoading) {

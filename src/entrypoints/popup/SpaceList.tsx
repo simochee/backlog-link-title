@@ -5,7 +5,7 @@ import { SpaceListItem } from "./SpaceListItem";
 interface SpaceListProps {
 	spaces: BacklogSpace[];
 	onUpdate: (index: number, space: BacklogSpace) => void;
-	onDelete: (index: number) => void;
+	onDelete: (spaceDomain: string) => void;
 }
 
 export function SpaceList({ spaces, onUpdate, onDelete }: SpaceListProps) {
@@ -29,10 +29,10 @@ export function SpaceList({ spaces, onUpdate, onDelete }: SpaceListProps) {
 		<div className="space-y-2.5">
 			{spaces.map((space, index) => (
 				<SpaceListItem
-					key={`${space.spaceDomain}-${index}`}
+					key={space.spaceDomain}
 					space={space}
 					onUpdate={(updatedSpace) => onUpdate(index, updatedSpace)}
-					onDelete={() => onDelete(index)}
+					onDelete={() => onDelete(space.spaceDomain)}
 				/>
 			))}
 		</div>

@@ -32,9 +32,11 @@ export const updateSpaceMutationOptions = {
 };
 
 export const deleteSpaceMutationOptions = {
-	mutationFn: async (index: number) => {
+	mutationFn: async (spaceDomain: string) => {
 		const currentSpaces = await backlogSpaces.getValue();
-		const newSpaces = currentSpaces.filter((_, i) => i !== index);
+		const newSpaces = currentSpaces.filter(
+			(space) => space.spaceDomain !== spaceDomain,
+		);
 		await backlogSpaces.setValue(newSpaces);
 		return newSpaces;
 	},
