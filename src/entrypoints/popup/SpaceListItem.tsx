@@ -1,6 +1,7 @@
 import { IconKey } from "@tabler/icons-react";
 import { useForm } from "@tanstack/react-form";
 import { valibotValidator } from "@tanstack/valibot-form-adapter";
+import { useEffect, useRef } from "react";
 import * as v from "valibot";
 import { FormField } from "./FormField";
 
@@ -29,18 +30,44 @@ export function SpaceListItem({
 			apiKey: space.apiKey,
 		},
 		onSubmit: async ({ value }) => {
-			onUpdate({
-				spaceDomain: space.spaceDomain,
-				apiKey: value.apiKey,
-			});
-			// Reset form state to mark as pristine after successful update
-			form.reset();
+			// Not used anymore, but keeping for form structure
 		},
 		validatorAdapter: valibotValidator(),
 		validators: {
 			onChange: formSchema,
 		},
 	});
+
+	const isFirstRender = useRef(true);
+
+	// Watch for changes and auto-save
+	useEffect(() => {
+		const unsubscribe = form.store.subscribe(() => {
+			const state = form.store.state;
+			const apiKeyField = state.fieldMeta.apiKey;
+			const apiKeyValue = state.values.apiKey;
+
+			// Skip on first render
+			if (isFirstRender.current) {
+				isFirstRender.current = false;
+				return;
+			}
+
+			// If valid and changed, auto-save
+			if (
+				apiKeyField &&
+				apiKeyField.errors.length === 0 &&
+				apiKeyValue !== space.apiKey
+			) {
+				onUpdate({
+					spaceDomain: space.spaceDomain,
+					apiKey: apiKeyValue,
+				});
+			}
+		});
+
+		return () => unsubscribe();
+	}, [form.store, space.apiKey, space.spaceDomain, onUpdate]);
 
 	return (
 		<div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow duration-200">
@@ -60,61 +87,28 @@ export function SpaceListItem({
 				</button>
 			</div>
 
-			<form
-				onSubmit={(e) => {
-					e.preventDefault();
-					e.stopPropagation();
-					form.handleSubmit();
-				}}
-			>
-				<form.Field name="apiKey">
-					{(field) => (
-						<div className="flex gap-2">
-							<div className="flex-1">
-								<FormField
-									label="API Key"
-									field={field}
-									icon={IconKey}
-									placeholder="Enter your API key"
-									getIconColor={(f) =>
-										f.state.meta.isDirty
-											? "text-amber-500"
-											: f.state.meta.errors.length > 0
-												? "text-red-500"
-												: "text-gray-400 group-focus-within:text-emerald-600"
-									}
-									getInputClassName={(f) =>
-										`w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
-											f.state.meta.isDirty
-												? "border-amber-300 bg-amber-50 focus:border-amber-500 focus:ring-amber-500/20"
-												: f.state.meta.errors.length > 0
-													? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500/20"
-													: "border-gray-200 bg-gray-50 focus:border-emerald-500 focus:ring-emerald-500/20 focus:bg-white"
-										}`
-									}
-								/>
-							</div>
-							<form.Subscribe
-								selector={(state) => [
-									state.canSubmit,
-									state.isSubmitting,
-									state.isDirty,
-								]}
-							>
-								{([canSubmit, isSubmitting, isDirty]) => (
-									<button
-										type="submit"
-										disabled={!canSubmit || !isDirty}
-										className="flex-shrink-0 self-start px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-lg hover:from-emerald-700 hover:to-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 shadow-sm hover:shadow transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-sm disabled:hover:from-emerald-600 disabled:hover:to-emerald-700"
-									>
-										{isSubmitting ? "Updating..." : "Update"}
-									</button>
-								)}
-							</form.Subscribe>
-						</div>
-					)}
-				</form.Field>
-			</form>
+			<form.Field name="apiKey">
+				{(field) => (
+					<FormField
+						label="API Key"
+						field={field}
+						icon={IconKey}
+						placeholder="Enter your API key"
+						getIconColor={(f) =>
+							f.state.meta.errors.length > 0
+								? "text-red-500"
+								: "text-gray-400 group-focus-within:text-emerald-600"
+						}
+						getInputClassName={(f) =>
+							`w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
+								f.state.meta.errors.length > 0
+									? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-red-500/20"
+									: "border-gray-200 bg-gray-50 focus:border-emerald-500 focus:ring-emerald-500/20 focus:bg-white"
+							}`
+						}
+					/>
+				)}
+			</form.Field>
 		</div>
 	);
 }
