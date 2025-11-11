@@ -61,17 +61,17 @@ export function Popup() {
 
 	if (isLoading) {
 		return (
-			<div className="flex min-h-screen min-w-[28rem] max-w-[40rem] items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+			<div className="flex min-w-[480px] items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
 				<p className="text-gray-500 text-sm">Loading...</p>
 			</div>
 		);
 	}
 
 	return (
-		<div className="min-h-screen min-w-[28rem] max-w-[40rem] bg-gradient-to-br from-gray-50 to-gray-100">
-			<div className="p-4">
+		<div className="min-w-[480px] bg-gradient-to-br from-gray-50 to-gray-100">
+			<div className="px-2 py-5">
 				{/* Header */}
-				<div className="mb-4">
+				<div className="mb-4 px-2">
 					<h1 className="font-bold text-gray-900 text-xl tracking-tight">
 						Backlog Spaces
 					</h1>

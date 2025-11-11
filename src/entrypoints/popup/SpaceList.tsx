@@ -11,7 +11,7 @@ interface SpaceListProps {
 export function SpaceList({ spaces, onUpdate, onDelete }: SpaceListProps) {
 	if (spaces.length === 0) {
 		return (
-			<div className="rounded-lg border-2 border-gray-200 border-dashed bg-white px-4 py-8 text-center">
+			<div className="rounded-lg border-2 border-gray-200 border-dashed bg-white px-2 py-8 text-center">
 				<div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
 					<IconDatabase size={20} className="text-gray-400" stroke={1.5} />
 				</div>
