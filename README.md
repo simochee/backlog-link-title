@@ -2,7 +2,7 @@
 <h1 align="center">Backlog Link Title</h1>
 
 <p align="center">
-A browser extension that automatically unfurls Backlog links (issues, wikis, pull requests) to display rich previews with project keys, status, and summaries.
+A browser extension that automatically replaces Backlog link URLs with rich text titles showing project keys, status, and summaries for issues, wikis, and pull requests.
 </p>
 
 ## 💿 Install
