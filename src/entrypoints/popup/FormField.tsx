@@ -43,7 +43,7 @@ export function FormField({
 				{label}
 			</label>
 			<div className="group relative">
-				<div className="pointer-events-none absolute top-2 left-3">
+				<div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
 					<IconComponent size={16} className={iconColor} />
 				</div>
 				<input
