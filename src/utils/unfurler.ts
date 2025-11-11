@@ -1,3 +1,4 @@
+import { replaceUrlInTextNodes } from "./replaceUrlInTextNodes";
 import { backlogSpaces } from "./spaces";
 
 export const unfurlIssue = async (el: HTMLAnchorElement) => {
@@ -15,7 +16,7 @@ export const unfurlIssue = async (el: HTMLAnchorElement) => {
 		`https://${space.spaceDomain}/api/v2/issues/${issueKey}?apiKey=${space.apiKey}`,
 	).then((res) => res.json());
 
-	el.textContent = `[${issueKey}] ${data.summary} | 課題 | Backlog`;
+	replaceUrlInTextNodes(el, `[${issueKey}] ${data.summary} | 課題 | Backlog`);
 };
 
 export const unfurlDocument = async (el: HTMLAnchorElement) => {
@@ -35,7 +36,10 @@ export const unfurlDocument = async (el: HTMLAnchorElement) => {
 		`https://${space.spaceDomain}/api/v2/documents/${documentId}?apiKey=${space.apiKey}`,
 	).then((res) => res.json());
 
-	el.textContent = `[${projectKey}] ${data.title} | ドキュメント | Backlog`;
+	replaceUrlInTextNodes(
+		el,
+		`[${projectKey}] ${data.title} | ドキュメント | Backlog`,
+	);
 };
 
 export const unfurlPullRequest = async (el: HTMLAnchorElement) => {
@@ -55,7 +59,10 @@ export const unfurlPullRequest = async (el: HTMLAnchorElement) => {
 		`https://${space.spaceDomain}/api/v2/projects/${projectKey}/git/repositories/${repository}/pullRequests/${number}?apiKey=${space.apiKey}`,
 	).then((res) => res.json());
 
-	el.textContent = `[${projectKey}/${repository}#${number}] ${data.summary} | プルリクエスト | Git | Backlog`;
+	replaceUrlInTextNodes(
+		el,
+		`[${projectKey}/${repository}#${number}] ${data.summary} | プルリクエスト | Git | Backlog`,
+	);
 };
 
 export const unfurlWiki = async (el: HTMLAnchorElement) => {
@@ -77,5 +84,8 @@ export const unfurlWiki = async (el: HTMLAnchorElement) => {
 		`https://${space.spaceDomain}/api/v2/projects/${data.projectId}?apiKey=${space.apiKey}`,
 	).then((res) => res.json());
 
-	el.textContent = `[${project.projectKey}] ${data.name} | Wiki | Backlog`;
+	replaceUrlInTextNodes(
+		el,
+		`[${project.projectKey}] ${data.name} | Wiki | Backlog`,
+	);
 };
