@@ -29,7 +29,7 @@ export function FormField({
 	);
 
 	const inputClassName = clsx(
-		"w-full pl-9 pr-3 py-2 text-sm bg-gray-50 border rounded-lg",
+		"w-full pl-10 pr-3 py-2 text-sm bg-gray-50 border rounded-lg",
 		"focus:outline-none focus:ring-2 focus:bg-white transition-all duration-200",
 		hasError
 			? "border-red-300 focus:border-red-500 focus:ring-red-500/20"
@@ -38,16 +38,14 @@ export function FormField({
 
 	return (
 		<div>
-			<label
-				htmlFor={inputId}
-				className="mb-1 block font-medium text-gray-700 text-xs"
-			>
-				{label}
-			</label>
 			<div className="group relative">
-				<div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+				<label
+					htmlFor={inputId}
+					className="absolute inset-y-0 left-0 grid w-10 place-items-center"
+				>
 					<IconComponent size={16} className={iconColor} />
-				</div>
+					<span className="sr-only">{label}</span>
+				</label>
 				<input
 					id={inputId}
 					name={field.name}
