@@ -1,6 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { onMatchNode } from "./onMatchNode";
 
+vi.mock("@/utils/spaces", () => ({
+	backlogSpaces: {
+		getValue: vi.fn().mockResolvedValue([
+			{
+				spaceDomain: "example.backlog.jp",
+				apiKey: "test-api-key",
+			},
+			{
+				spaceDomain: "example.backlog.com",
+				apiKey: "test-api-key",
+			},
+		]),
+	},
+}));
+
 describe("onMatchNode", () => {
 	beforeEach(() => {
 		document.body.innerHTML = "";
@@ -20,12 +35,12 @@ describe("onMatchNode", () => {
 		it.each([
 			["backlog.jp", "https://example.backlog.jp/view/TEST-123"],
 			["backlog.com", "https://example.backlog.com/view/TEST-123"],
-		])("should match valid %s links", (_, href) => {
+		])("should match valid %s links", async (_, href) => {
 			const callback = vi.fn();
 			const anchor = createAnchor(href);
 			document.body.appendChild(anchor);
 
-			onMatchNode(callback);
+			await onMatchNode(callback);
 
 			expect(callback).toHaveBeenCalledWith(anchor);
 		});
@@ -37,17 +52,17 @@ describe("onMatchNode", () => {
 				"Different text",
 			],
 			["non-backlog domains", "https://example.com/view/TEST-123", undefined],
-		])("should not match when %s", (_, href, textContent) => {
+		])("should not match when %s", async (_, href, textContent) => {
 			const callback = vi.fn();
 			const anchor = createAnchor(href, textContent);
 			document.body.appendChild(anchor);
 
-			onMatchNode(callback);
+			await onMatchNode(callback);
 
 			expect(callback).not.toHaveBeenCalled();
 		});
 
-		it("should not match links inside contenteditable elements", () => {
+		it("should not match links inside contenteditable elements", async () => {
 			const callback = vi.fn();
 			const div = document.createElement("div");
 			div.contentEditable = "true";
@@ -55,7 +70,7 @@ describe("onMatchNode", () => {
 			div.appendChild(anchor);
 			document.body.appendChild(div);
 
-			onMatchNode(callback);
+			await onMatchNode(callback);
 
 			expect(callback).not.toHaveBeenCalled();
 		});
@@ -64,7 +79,7 @@ describe("onMatchNode", () => {
 	describe("MutationObserver", () => {
 		it("should detect dynamically added matching elements", async () => {
 			const callback = vi.fn();
-			onMatchNode(callback);
+			await onMatchNode(callback);
 
 			const anchor = createAnchor("https://example.backlog.jp/view/TEST-123");
 			document.body.appendChild(anchor);
@@ -76,7 +91,7 @@ describe("onMatchNode", () => {
 
 		it("should detect matching anchors within added elements", async () => {
 			const callback = vi.fn();
-			onMatchNode(callback);
+			await onMatchNode(callback);
 
 			const div = document.createElement("div");
 			const anchor = createAnchor("https://example.backlog.jp/view/TEST-123");
