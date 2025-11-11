@@ -42,13 +42,13 @@ export function Popup() {
 
 	return (
 		<div className="min-w-[28rem] max-w-[40rem] min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-			<div className="p-6">
+			<div className="p-4">
 				{/* Header */}
-				<div className="mb-6">
-					<h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+				<div className="mb-4">
+					<h1 className="text-xl font-bold text-gray-900 tracking-tight">
 						Backlog Spaces
 					</h1>
-					<p className="mt-1 text-sm text-gray-600">
+					<p className="mt-0.5 text-xs text-gray-600">
 						Manage your connected Backlog spaces and API keys
 					</p>
 				</div>
@@ -61,21 +61,21 @@ export function Popup() {
 				/>
 
 				{/* Add New Space Section */}
-				<div className={spaces.length > 0 ? "mt-4" : ""}>
+				<div className="mt-3">
 					{!isFormOpen ? (
 						<button
 							type="button"
 							onClick={() => setIsFormOpen(true)}
-							className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-gray-700 bg-white border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200"
+							className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm font-medium text-gray-700 bg-white border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200"
 						>
 							<IconPlus size={18} />
 							Add New Space
 						</button>
 					) : (
-						<div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-							<div className="flex items-center gap-2 mb-4">
-								<div className="w-1 h-5 bg-gradient-to-b from-emerald-500 to-emerald-600 rounded-full" />
-								<h2 className="text-base font-semibold text-gray-900">
+						<div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+							<div className="flex items-center gap-2 mb-3">
+								<div className="w-1 h-4 bg-gradient-to-b from-emerald-500 to-emerald-600 rounded-full" />
+								<h2 className="text-sm font-semibold text-gray-900">
 									Add New Space
 								</h2>
 							</div>

@@ -40,10 +40,10 @@ export function SpaceListItem({
 	});
 
 	return (
-		<div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow duration-200">
-			<div className="flex items-start justify-between mb-4">
-				<div className="flex items-center gap-2 flex-1 min-w-0">
-					<div className="flex-shrink-0 w-2 h-2 rounded-full bg-emerald-500" />
+		<div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow duration-200">
+			<div className="flex items-start justify-between mb-3">
+				<div className="flex items-center gap-1.5 flex-1 min-w-0">
+					<div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-emerald-500" />
 					<h3 className="text-sm font-semibold text-gray-900 truncate">
 						{space.spaceDomain}
 					</h3>
@@ -51,7 +51,7 @@ export function SpaceListItem({
 				<button
 					type="button"
 					onClick={onDelete}
-					className="flex-shrink-0 ml-2 text-xs font-medium text-red-600 hover:text-red-800 hover:bg-red-50 px-2.5 py-1 rounded transition-colors"
+					className="flex-shrink-0 ml-2 text-xs font-medium text-red-600 hover:text-red-800 hover:bg-red-50 px-2 py-0.5 rounded transition-colors"
 				>
 					Delete
 				</button>
@@ -69,15 +69,15 @@ export function SpaceListItem({
 						<div>
 							<label
 								htmlFor={`${space.spaceDomain}-apikey`}
-								className="block text-xs font-medium text-gray-700 mb-1.5"
+								className="block text-xs font-medium text-gray-700 mb-1"
 							>
 								API Key
 							</label>
 							<div className="flex gap-2">
 								<div className="flex-1 relative group">
-									<div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+									<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
 										<IconKey
-											size={18}
+											size={16}
 											className={`transition-colors ${
 												field.state.meta.isDirty
 													? "text-amber-500"
@@ -94,7 +94,7 @@ export function SpaceListItem({
 										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={(e) => field.handleChange(e.target.value)}
-										className={`w-full pl-11 pr-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
+										className={`w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
 											field.state.meta.isDirty
 												? "border-amber-300 bg-amber-50 focus:border-amber-500 focus:ring-amber-500/20"
 												: field.state.meta.errors.length > 0
@@ -104,7 +104,7 @@ export function SpaceListItem({
 										placeholder="Enter your API key"
 									/>
 									{field.state.meta.errors.length > 0 && (
-										<p className="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+										<p className="mt-1 text-xs text-red-600 flex items-center gap-1">
 											<span className="inline-block w-1 h-1 rounded-full bg-red-600" />
 											{field.state.meta.errors[0].message}
 										</p>
@@ -121,7 +121,7 @@ export function SpaceListItem({
 										<button
 											type="submit"
 											disabled={!canSubmit || !isDirty}
-											className="flex-shrink-0 px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-lg hover:from-emerald-700 hover:to-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 shadow-sm hover:shadow transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-sm disabled:hover:from-emerald-600 disabled:hover:to-emerald-700"
+											className="flex-shrink-0 px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-lg hover:from-emerald-700 hover:to-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 shadow-sm hover:shadow transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-sm disabled:hover:from-emerald-600 disabled:hover:to-emerald-700"
 										>
 											{isSubmitting ? "Updating..." : "Update"}
 										</button>
