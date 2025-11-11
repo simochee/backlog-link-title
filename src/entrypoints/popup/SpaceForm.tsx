@@ -68,7 +68,7 @@ export function SpaceForm({
 			apiKey: initialValue?.apiKey ?? "",
 		},
 		onSubmit: async ({ value }) => {
-			onSubmit(value);
+			await onSubmit(value);
 			form.reset();
 		},
 		validators: {

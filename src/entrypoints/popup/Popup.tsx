@@ -38,8 +38,14 @@ export function Popup() {
 	});
 
 	const handleAdd = async (space: BacklogSpace) => {
-		await addSpaceMutation.mutateAsync(space);
-		setIsFormOpen(false);
+		try {
+			await addSpaceMutation.mutateAsync(space);
+			setIsFormOpen(false);
+		} catch (error) {
+			if (error instanceof Error) {
+				alert(error.message);
+			}
+		}
 	};
 
 	const handleUpdate = async (index: number, space: BacklogSpace) => {

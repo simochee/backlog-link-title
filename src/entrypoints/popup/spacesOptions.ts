@@ -9,6 +9,17 @@ export const spacesQueryOptions = queryOptions({
 export const addSpaceMutationOptions = {
 	mutationFn: async (space: BacklogSpace) => {
 		const currentSpaces = await backlogSpaces.getValue();
+
+		const isDuplicate = currentSpaces.some(
+			(existingSpace) => existingSpace.spaceDomain === space.spaceDomain,
+		);
+
+		if (isDuplicate) {
+			throw new Error(
+				`Space domain "${space.spaceDomain}" is already registered`,
+			);
+		}
+
 		const newSpaces = [...currentSpaces, space];
 		await backlogSpaces.setValue(newSpaces);
 		return newSpaces;
