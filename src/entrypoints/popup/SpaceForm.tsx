@@ -2,6 +2,7 @@ import { IconKey, IconWorld } from "@tabler/icons-react";
 import { useForm } from "@tanstack/react-form";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import * as v from "valibot";
+import { browser } from "wxt/browser";
 import type { BacklogSpace } from "@/utils/spaces";
 import { FormField } from "./FormField";
 
