@@ -1,4 +1,5 @@
 import { regex } from "arkregex";
+import { joinURL } from "ufo";
 import type {
 	BacklogDocument,
 	BacklogIssue,
@@ -22,7 +23,10 @@ export const issueUnfurler = defineUnfurler({
 		regex(`^/view/${ISSUE_KEY_REGEX}$`).exec(url.pathname)?.groups,
 	buildTitle: async (params, url) => {
 		const promises = [
-			client<BacklogIssue>(url.hostname, `/api/v2/issues/${params.issueKey}`),
+			client<BacklogIssue>(
+				url.hostname,
+				joinURL("/api/v2/issues", params.issueKey),
+			),
 		] as const;
 
 		if (url.hash.startsWith("#comment-")) {
@@ -30,7 +34,12 @@ export const issueUnfurler = defineUnfurler({
 				...promises,
 				client<BacklogIssueComment>(
 					url.hostname,
-					`/api/v2/issues/${params.issueKey}/comments/${url.hash.slice(9)}`,
+					joinURL(
+						"/api/v2/issues",
+						params.issueKey,
+						"comments",
+						url.hash.slice(9),
+					),
 				),
 			]);
 
@@ -48,11 +57,11 @@ export const wikiUnfurler = defineUnfurler({
 	buildTitle: async (params, url) => {
 		const wiki = await client<BacklogWiki>(
 			url.hostname,
-			`/api/v2/wikis/${params.wikiId}`,
+			joinURL("/api/v2/wikis", params.wikiId),
 		);
 		const project = await client<BacklogProject>(
 			url.hostname,
-			`/api/v2/projects/${wiki.projectId}`,
+			joinURL("/api/v2/projects", String(wiki.projectId)),
 		);
 		return `[${project.projectKey}] ${wiki.name} | Wiki`;
 	},
@@ -67,7 +76,7 @@ export const documentUnfurler = defineUnfurler({
 		const [document] = await Promise.all([
 			client<BacklogDocument>(
 				url.hostname,
-				`/api/v2/documents/${params.documentId}`,
+				joinURL("/api/v2/documents", params.documentId),
 			),
 		]);
 		return `[${params.projectKey}] ${document.title} | Document`;
@@ -86,7 +95,14 @@ export const pullRequestUnfurler = defineUnfurler({
 
 		const pullRequest = await client<BacklogPullRequest>(
 			url.hostname,
-			`/api/v2/projects/${params.projectKey}/git/repositories/${params.repository}/pullRequests/${params.number}`,
+			joinURL(
+				"/api/v2/projects",
+				params.projectKey,
+				"git/repositories",
+				params.repository,
+				"pullRequests",
+				params.number,
+			),
 		);
 
 		return `[${params.projectKey}/${params.repository}#${params.number}][${pullRequest.status.name}] ${pullRequest.summary} | Pull Request`;
