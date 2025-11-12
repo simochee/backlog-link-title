@@ -22,15 +22,11 @@ export const issueUnfurler = defineUnfurler({
 		regex(`^/view/${ISSUE_KEY_REGEX}$`).exec(url.pathname)?.groups,
 	buildTitle: async (params, url) => {
 		const promises = [
-			client<BacklogProject>(
-				url.hostname,
-				`/api/v2/projects/${params.issueKey.split("-")[0]}`,
-			),
 			client<BacklogIssue>(url.hostname, `/api/v2/issues/${params.issueKey}`),
 		] as const;
 
 		if (url.hash.startsWith("#comment-")) {
-			const [project, issue, issueComment] = await Promise.all([
+			const [issue, issueComment] = await Promise.all([
 				...promises,
 				client<BacklogIssueComment>(
 					url.hostname,
@@ -38,11 +34,11 @@ export const issueUnfurler = defineUnfurler({
 				),
 			]);
 
-			return `[${project.projectKey}][${issue.status.name}] ${issue.summary} | Comment by ${issueComment.createdUser.name}`;
+			return `[${params.issueKey}][${issue.status.name}] ${issue.summary} | Comment by ${issueComment.createdUser.name}`;
 		}
-		const [project, issue] = await Promise.all(promises);
+		const [issue] = await Promise.all(promises);
 
-		return `[${project.projectKey}][${issue.status.name}] ${issue.summary} | Issue`;
+		return `[${params.issueKey}][${issue.status.name}] ${issue.summary} | Issue`;
 	},
 });
 
@@ -68,17 +64,13 @@ export const documentUnfurler = defineUnfurler({
 			url.pathname,
 		)?.groups,
 	buildTitle: async (params, url) => {
-		const [project, document] = await Promise.all([
-			client<BacklogProject>(
-				url.hostname,
-				`/api/v2/projects/${params.projectKey}`,
-			),
+		const [document] = await Promise.all([
 			client<BacklogDocument>(
 				url.hostname,
 				`/api/v2/documents/${params.documentId}`,
 			),
 		]);
-		return `[${project.projectKey}] ${document.title} | Document`;
+		return `[${params.projectKey}] ${document.title} | Document`;
 	},
 });
 
