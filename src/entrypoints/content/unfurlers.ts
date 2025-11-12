@@ -13,6 +13,9 @@ import { client } from "./fetch";
 
 const ISSUE_KEY_REGEX = "(?<issueKey>[A-Z0-9_]+-[0-9]+)" as const;
 const WIKI_ID_REGEX = "(?<wikiId>[0-9]+)" as const;
+const WIKI_TITLE_REGEX = "(?<wikiTitle>[^/]+)" as const;
+const WIKI_DIFF_REGEX =
+	"(?<wikiDiffFrom>[0-9]+)\\.\\.\\.(?<wikiDiffTo>[0-9]+)" as const;
 const DOCUMENT_ID_REGEX = "(?<documentId>[a-f0-9]{32})" as const;
 const PROJECT_KEY_REGEX = "(?<projectKey>[A-Z0-9_]+)" as const;
 const REPOSITORY_REGEX = "(?<repository>[a-z0-9-]+)" as const;
@@ -64,6 +67,22 @@ export const wikiUnfurler = defineUnfurler({
 			joinURL("/api/v2/projects", String(wiki.projectId)),
 		);
 		return `[${project.projectKey}] ${wiki.name} | Wiki`;
+	},
+});
+
+export const wikiWithTitleUnfurler = defineUnfurler({
+	parseUrl: (url) =>
+		regex(
+			`^/wiki/${PROJECT_KEY_REGEX}/${WIKI_TITLE_REGEX}(?:/diff/${WIKI_DIFF_REGEX})?$`,
+		).exec(url.pathname)?.groups,
+	buildTitle: (params) => {
+		let title = `[${params.projectKey}] ${decodeURIComponent(params.wikiTitle)}`;
+
+		if (params.wikiDiffTo && params.wikiDiffFrom) {
+			title += ` (Comparison between version ${params.wikiDiffFrom} and version ${params.wikiDiffTo})`;
+		}
+
+		return `${title} | Wiki`;
 	},
 });
 
