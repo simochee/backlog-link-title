@@ -20,6 +20,8 @@ const DOCUMENT_ID_REGEX = "(?<documentId>[a-f0-9]{32})" as const;
 const PROJECT_KEY_REGEX = "(?<projectKey>[A-Z0-9_]+)" as const;
 const REPOSITORY_REGEX = "(?<repository>[a-z0-9-]+)" as const;
 const PULL_REQUEST_NUMBER_REGEX = "(?<number>[0-9]+)" as const;
+const GIT_FILE_PATH_REGEX = "(?<filePath>.+)" as const;
+const GIT_COMMIT_HASH_REGEX = "(?<commitHash>[a-f0-9]+)" as const;
 
 export const issueUnfurler = defineUnfurler({
 	parseUrl: (url) =>
@@ -125,5 +127,26 @@ export const pullRequestUnfurler = defineUnfurler({
 		);
 
 		return `[${params.projectKey}/${params.repository}#${params.number}][${pullRequest.status.name}] ${pullRequest.summary} | Pull Request`;
+	},
+});
+
+export const gitFileUnfurler = defineUnfurler({
+	parseUrl: (url) =>
+		regex(
+			`^/git/${PROJECT_KEY_REGEX}/${REPOSITORY_REGEX}/(?:blob|tree)/${GIT_FILE_PATH_REGEX}$`,
+		).exec(url.pathname)?.groups,
+	buildTitle: (params) => {
+		const fileName = params.filePath.split("/").pop();
+		return `[${params.projectKey}/${params.repository}] ${fileName} | Git`;
+	},
+});
+
+export const gitCommitUnfurler = defineUnfurler({
+	parseUrl: (url) =>
+		regex(
+			`^/git/${PROJECT_KEY_REGEX}/${REPOSITORY_REGEX}/commit/${GIT_COMMIT_HASH_REGEX}$`,
+		).exec(url.pathname)?.groups,
+	buildTitle: (params) => {
+		return `[${params.projectKey}/${params.repository}] リビジョン : ${params.commitHash.slice(0, 10)} | Git`;
 	},
 });
