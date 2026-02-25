@@ -90,17 +90,16 @@ export const wikiWithTitleUnfurler = defineUnfurler({
 
 export const documentUnfurler = defineUnfurler({
 	parseUrl: (url) =>
-		regex(`^/document/${PROJECT_KEY_REGEX}/${DOCUMENT_ID_REGEX}$`).exec(
-			url.pathname,
-		)?.groups,
+		regex(
+			`^/document/${PROJECT_KEY_REGEX}/(?<edit>e/)?${DOCUMENT_ID_REGEX}$`,
+		).exec(url.pathname)?.groups,
 	buildTitle: async (params, url) => {
-		const [document] = await Promise.all([
-			client<BacklogDocument>(
-				url.hostname,
-				joinURL("/api/v2/documents", params.documentId),
-			),
-		]);
-		return `[${params.projectKey}] ${document.title} | Document`;
+		const document = await client<BacklogDocument>(
+			url.hostname,
+			joinURL("/api/v2/documents", params.documentId),
+		);
+		const prefix = params.edit ? "Edit " : "";
+		return `[${params.projectKey}] ${prefix}${document.title} | Document`;
 	},
 });
 

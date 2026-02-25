@@ -1,29 +1,79 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { mockReplaceUrlInTextNodes } = vi.hoisted(() => ({
+const { mockReplaceUrlInTextNodes, mockClient } = vi.hoisted(() => ({
 	mockReplaceUrlInTextNodes: vi.fn(),
+	mockClient: vi
+		.fn()
+		.mockResolvedValue({ name: "TestSpace", spaceKey: "test" }),
 }));
 
 vi.mock("./fetch", () => ({
-	client: vi.fn().mockResolvedValue({ name: "TestSpace", spaceKey: "test" }),
+	client: mockClient,
 }));
 
 vi.mock("./replaceUrlInTextNodes", () => ({
 	replaceUrlInTextNodes: mockReplaceUrlInTextNodes,
 }));
 
-import { gitCommitUnfurler, gitFileUnfurler } from "./unfurlers";
+import {
+	documentUnfurler,
+	gitCommitUnfurler,
+	gitFileUnfurler,
+} from "./unfurlers";
+
+const createAnchor = (href: string) => {
+	const anchor = document.createElement("a");
+	anchor.href = href;
+	return anchor;
+};
+
+describe("documentUnfurler", () => {
+	beforeEach(() => {
+		mockReplaceUrlInTextNodes.mockClear();
+		mockClient.mockReset();
+		mockClient.mockImplementation((_hostname: string, path: string) => {
+			if (path === "/api/v2/space") {
+				return Promise.resolve({ name: "TestSpace", spaceKey: "test" });
+			}
+			if (path.startsWith("/api/v2/documents/")) {
+				return Promise.resolve({
+					projectId: 1,
+					title: "Design Document",
+				});
+			}
+			return Promise.resolve({});
+		});
+	});
+
+	it("should build title for view URL", async () => {
+		const anchor = createAnchor(
+			"https://nulab.backlog.jp/document/PROJ/abcdef01234567890abcdef012345678",
+		);
+		await documentUnfurler(anchor);
+		expect(mockReplaceUrlInTextNodes).toHaveBeenCalledWith(
+			anchor,
+			"[TestSpace][PROJ] Design Document | Document",
+		);
+	});
+
+	it("should build title with Edit prefix for edit URL", async () => {
+		const anchor = createAnchor(
+			"https://nulab.backlog.jp/document/PROJ/e/abcdef01234567890abcdef012345678",
+		);
+		await documentUnfurler(anchor);
+		expect(mockReplaceUrlInTextNodes).toHaveBeenCalledWith(
+			anchor,
+			"[TestSpace][PROJ] Edit Design Document | Document",
+		);
+	});
+});
 
 describe("gitFileUnfurler", () => {
 	beforeEach(() => {
 		mockReplaceUrlInTextNodes.mockClear();
+		mockClient.mockReset();
+		mockClient.mockResolvedValue({ name: "TestSpace", spaceKey: "test" });
 	});
-
-	const createAnchor = (href: string) => {
-		const anchor = document.createElement("a");
-		anchor.href = href;
-		return anchor;
-	};
 
 	it("should build title for blob URL with filename", async () => {
 		const anchor = createAnchor(
@@ -76,13 +126,9 @@ describe("gitFileUnfurler", () => {
 describe("gitCommitUnfurler", () => {
 	beforeEach(() => {
 		mockReplaceUrlInTextNodes.mockClear();
+		mockClient.mockReset();
+		mockClient.mockResolvedValue({ name: "TestSpace", spaceKey: "test" });
 	});
-
-	const createAnchor = (href: string) => {
-		const anchor = document.createElement("a");
-		anchor.href = href;
-		return anchor;
-	};
 
 	it("should build title with truncated commit hash", async () => {
 		const anchor = createAnchor(
